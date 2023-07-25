@@ -19,16 +19,20 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Divider } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DownloadIcon from "@mui/icons-material/Download";
 
 export default function CustomizedInputBase() {
   interface List {
     images: string[];
     videos: string[];
+    others: string[];
   }
 
   const { selectedTask } = useAppSelector((state) => state.dashboard);
   const [image, setImage] = useState<string | null>(null);
   const [video, setVideo] = useState<string | null>(null);
+  const [other, setOther] = useState<string | null>(null);
   const [filesList, setFilesList] = useState(generateList());
   const fileInputRef: RefObject<HTMLInputElement> =
     useRef<HTMLInputElement>(null);
@@ -40,6 +44,7 @@ export default function CustomizedInputBase() {
     let list: List = {
       images: [],
       videos: [],
+      others: [],
     };
     for (const e of selectedTask?.uploads as string[]) {
       let ext = getFileExtension(e);
@@ -47,6 +52,8 @@ export default function CustomizedInputBase() {
         list.images.push(e);
       } else if (ext == "mp4") {
         list.videos.push(e);
+      } else {
+        list.others.push(e);
       }
     }
     return list;
@@ -66,6 +73,8 @@ export default function CustomizedInputBase() {
           newList.images.push(res?.data?.file);
         } else if (ext == "mp4") {
           newList.videos.push(res?.data?.file);
+        } else {
+          newList.others.push(res?.data?.file);
         }
         setFilesList(newList);
       }
@@ -95,10 +104,13 @@ export default function CustomizedInputBase() {
         newList.images = newList.images.filter((e) => e != res?.data?.file);
       } else if (ext == "mp4") {
         newList.videos = newList.videos.filter((e) => e != res?.data?.file);
+      } else {
+        newList.others = newList.others.filter((e) => e != res?.data?.file);
       }
       setFilesList(newList);
       setImage(null);
       setVideo(null);
+      setOther(null);
     }
   }
 
@@ -138,6 +150,32 @@ export default function CustomizedInputBase() {
       className={classes.flex}
       style={{ height: image || video ? "100%" : "" }}
     >
+      {other ? (
+        <>
+          <div className={classes.buttons}>
+            <button
+              className={classes.button}
+              onClick={() => removeItem(other)}
+            >
+              <DeleteIcon sx={{ height: 20 }} />
+            </button>
+            <button
+              className={classes.button}
+              onClick={() => {
+                window.open(`${keys.baseUrl}/${other}`, "_blank");
+              }}
+            >
+              <DownloadIcon sx={{ height: 20 }} />
+            </button>
+            <button className={classes.button} onClick={() => setOther(null)}>
+              <CloseIcon sx={{ height: 20 }} />
+            </button>
+          </div>
+          <div className={classes.open}>
+            <DescriptionIcon sx={{ color: "grey" }} fontSize="large" />
+          </div>
+        </>
+      ) : null}
       {video ? (
         <>
           <div className={classes.buttons}>
@@ -179,7 +217,7 @@ export default function CustomizedInputBase() {
           )}
         </TransformWrapper>
       ) : null}
-      {!image && !video ? (
+      {!image && !video && !other ? (
         <>
           <input
             type="file"
@@ -224,6 +262,27 @@ export default function CustomizedInputBase() {
                   >
                     <div className={classes.video}>
                       <PlayArrowIcon sx={{ color: "white" }} />
+                    </div>
+                    <p className={classes.name}>{attachment}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <p>Others</p>
+            <Divider />
+            <div className={classes.flex}>
+              {filesList.others.map((attachment) => {
+                return (
+                  <div
+                    className={classes.attachmentContainer}
+                    onClick={() => setOther(attachment)}
+                    key={attachment}
+                  >
+                    <div className={classes.other}>
+                      <DescriptionIcon
+                        sx={{ color: "grey" }}
+                        fontSize="large"
+                      />
                     </div>
                     <p className={classes.name}>{attachment}</p>
                   </div>

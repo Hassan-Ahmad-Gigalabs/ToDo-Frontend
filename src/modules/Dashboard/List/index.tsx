@@ -36,19 +36,12 @@ export default function BasicModal() {
           {isLoading ? (
             <CircularProgress />
           ) : isError ? (
-            <p>
-              {
-                //   error?.data?.message
-                //     ? error?.data?.message
-                //     :
-                "Failed to fetch tasks"
-              }
-            </p>
+            <p>Failed to fetch tasks</p>
           ) : (
             <>
               {data &&
                 data.map((task: Task) => {
-                  let time = new Date(task.endDate);
+                  let time = new Date(task.createdAt);
                   let timeString = `${time.getDate()} ${time.toLocaleString(
                     "default",
                     { month: "long" }
