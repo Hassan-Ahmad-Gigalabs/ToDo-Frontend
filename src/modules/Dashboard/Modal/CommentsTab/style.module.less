@@ -1,0 +1,54 @@
+.parent {
+  flex: 1;
+  overflow: auto;
+}
+
+.commentContainer {
+  display: flex;
+  gap: 15px;
+  margin: 15px 10px;
+}
+
+.userName {
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+.time {
+  white-space: nowrap;
+  overflow: hidden;
+  color: grey;
+}
+
+.comment {
+  width: 100%;
+  padding: 10px;
+  background: rgb(233, 231, 231);
+  border-radius: 10px;
+  height: max-content;
+}
+
+.title {
+  font-size: 1.2rem;
+  padding: 10px 0 0 10px;
+  color: gray;
+}
+
+.addComment {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 40px;
+  gap: 10px;
+  padding: 15px;
+  color: grey;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  height: 100%;
+}
